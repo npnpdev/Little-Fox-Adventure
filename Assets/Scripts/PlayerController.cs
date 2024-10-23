@@ -8,6 +8,10 @@ public class PlayerController : MonoBehaviour {
     [Range(0.01f, 20.0f)][SerializeField] private float moveSpeed = 0.1f; // moving speed of the player
     [Range(0.01f, 20.0f)][SerializeField] private float jumpForce = 6.0f; // jump speed of the player
     private Rigidbody2D rigidBody;
+    private Animator animator;
+    private bool isWalking;
+    private bool isFacingRight;
+
     public LayerMask groundLayer;
     const float rayLength = 1.5f;
     //[Space(10)]
@@ -25,23 +29,49 @@ public class PlayerController : MonoBehaviour {
 
     private void Awake() {
         rigidBody = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+        isFacingRight = true;
+    }
+    private void Flip()
+    {
+        Vector3 theScale = transform.localScale;
+        theScale.x *= -1;
+        transform.localScale = theScale;
+        if (isFacingRight)
+        {
+            isFacingRight = false;
+        }
+        else
+        {
+            isFacingRight = true;
+        }
     }
 
-    // Start is called before the first frame update
-    void Start() {
+        // Start is called before the first frame update
+        void Start() {
         
     }
 
     // Update is called once per frame
     void Update() {
 
+        isWalking = false;
         if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
         {
             transform.Translate(moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
+            isWalking = true;
+            if (!isFacingRight)
+            {
+                Flip();
+            }
         }
         else if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)){
             transform.Translate(-(moveSpeed * Time.deltaTime), 0.0f, 0.0f, Space.World);
-
+            isWalking = true;
+            if(isFacingRight)
+            {
+                Flip();
+            }
         }
 
         if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))
@@ -50,6 +80,8 @@ public class PlayerController : MonoBehaviour {
         }
 
         Debug.DrawRay(transform.position, rayLength * Vector3.down, Color.white, 1, false);
+        animator.SetBool("isGrounded", IsGrounded());
+        animator.SetBool("isWalking", isWalking);
 
     }
 }
