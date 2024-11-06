@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class PlayerController : MonoBehaviour {
 
@@ -182,11 +183,12 @@ public class PlayerController : MonoBehaviour {
         // Sprawdzenie kolizji z przeciwnikiem
         if (other.CompareTag("Enemy"))
         {
-            // Jeœli po³o¿enie gracza jest powy¿ej przeciwnika
-            if (transform.position.y > other.transform.position.y)
+            // Jeœli po³o¿enie gracza jest powy¿ej przeciwnika, uwzglêdniaj¹c wysokoœæ obu obiektów - dlatego dodajemy wysokosc gracza
+            if (this.transform.position.y > other.transform.position.y + this.transform.localScale.y / 2)
             {
                 score += 1; // Zwiêksz liczbê zdobytych punktów
-                Debug.Log("Killed an enemy");
+                Debug.Log("player: " + transform.position.y + " enemy: " + other.transform.position.y);
+                //Debug.Log("Killed an enemy");
             }
             else
             {
@@ -254,6 +256,9 @@ public class PlayerController : MonoBehaviour {
         {
             Death();
         }
+        else if (other.CompareTag("movingPlatform")){
+            transform.SetParent(other.gameObject.transform);
+        }
     }
     private void OnTriggerExit2D(Collider2D other) {
         if (other.CompareTag("Ladder"))
@@ -261,6 +266,10 @@ public class PlayerController : MonoBehaviour {
             isLadder = false;
             isClimbing = false; // Stop climbing when leaving the ladder
             rigidBody.gravityScale = 1; // Restore gravity
+        }
+        else if (other.CompareTag("movingPlatform"))
+        {
+            transform.SetParent(null);
         }
     }
 }

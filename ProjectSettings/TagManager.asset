@@ -12,6 +12,7 @@ TagManager:
   - Cherry
   - Ladder
   - Fire
+  - movingPlatform
   layers:
   - Default
   - TransparentFX

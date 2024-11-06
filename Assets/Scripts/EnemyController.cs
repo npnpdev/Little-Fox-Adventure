@@ -82,7 +82,7 @@ public class EnemyController : MonoBehaviour {
         if (other.CompareTag("Player"))
         {
             // Jeœli po³o¿enie gracza jest powy¿ej przeciwnika
-            if (other.transform.position.y > this.transform.position.y)
+            if (other.transform.position.y > (this.transform.position.y + transform.localScale.y / 2))
             {
                 isDead = true;
                 animator.SetBool("isDead", true); // Ustawienie animacji œmierci na true
@@ -104,6 +104,6 @@ public class EnemyController : MonoBehaviour {
 
         // Dezaktywuj obiekt przeciwnika po zakoñczeniu animacji
         gameObject.SetActive(false);
-        Debug.Log("Enemy has been killed");
+        //Debug.Log("Enemy has been killed");
     }
 }
