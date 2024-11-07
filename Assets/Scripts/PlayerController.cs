@@ -256,7 +256,7 @@ public class PlayerController : MonoBehaviour {
         {
             Death();
         }
-        else if (other.CompareTag("movingPlatform")){
+        else if (other.CompareTag("movingPlatform") || other.CompareTag("generatedPlatform")){
             transform.SetParent(other.gameObject.transform);
         }
     }
@@ -267,7 +267,7 @@ public class PlayerController : MonoBehaviour {
             isClimbing = false; // Stop climbing when leaving the ladder
             rigidBody.gravityScale = 1; // Restore gravity
         }
-        else if (other.CompareTag("movingPlatform"))
+        else if (other.CompareTag("movingPlatform") || other.CompareTag("generatedPlatform"))
         {
             transform.SetParent(null);
         }
