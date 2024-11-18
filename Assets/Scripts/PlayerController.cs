@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class PlayerController : MonoBehaviour {
 
@@ -19,11 +20,6 @@ public class PlayerController : MonoBehaviour {
     private bool isFacingRight = true;
     private float vertical;
 
-    private int lives = 3;
-    private int score = 0;
-    private int keysFound = 0;
-    private int points = 0;
-    private const int keysNumber = 3;
     private int additionalHeartsFounded = 0;
     private const int additionalHearts = 3;
     Vector2 startPosition;
@@ -31,6 +27,20 @@ public class PlayerController : MonoBehaviour {
     public LayerMask groundLayer;
     const float rayLength = 1.0f;
     const float rayWidth = 1.0f;
+
+    // Referencja do GameManager
+    private GameManager gameManager;
+
+    // DŸwiêki
+    [Range(0.01f, 20.0f)][SerializeField] float soundsLevel = 2.0f;
+    [SerializeField] AudioClip bSound;
+    [SerializeField] AudioClip jumpSound;
+    [SerializeField] AudioClip deathSound;
+    [SerializeField] AudioClip bonusSound;
+    [SerializeField] AudioClip gameOverSound;
+    [SerializeField] AudioClip enemyKilledSound;
+    private AudioSource source;
+
     //[Space(10)]
 
     bool IsGrounded() {
@@ -44,6 +54,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     void Jump() {
+        source.PlayOneShot(jumpSound, soundsLevel);
         rigidBody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
     }
 
@@ -51,6 +62,7 @@ public class PlayerController : MonoBehaviour {
         rigidBody = GetComponent<Rigidbody2D>();
         startPosition = transform.position;
         animator = GetComponent<Animator>();
+        source = GetComponent<AudioSource>();
     }
 
     private void Flip() {
@@ -69,7 +81,12 @@ public class PlayerController : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
-        
+        // Znalezienie GameManager na scenie (jeœli nie korzystasz z Singletona)
+        gameManager = FindObjectOfType<GameManager>();
+        if (gameManager == null)
+        {
+            Debug.LogError("GameManager nie zosta³ znaleziony!");
+        }
     }
 
     // Update is called once per frame
@@ -78,6 +95,7 @@ public class PlayerController : MonoBehaviour {
 
         if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
         {
+
             transform.Translate(moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
             isWalking = true;
 
@@ -87,6 +105,7 @@ public class PlayerController : MonoBehaviour {
             }
         }
         else if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)){
+
             transform.Translate(-(moveSpeed * Time.deltaTime), 0.0f, 0.0f, Space.World);
             isWalking = true;
 
@@ -165,11 +184,12 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void Death() {
-        lives--; // Zmniejsz liczbê ¿yæ
-        Debug.Log("Player hit! Lives left: " + lives);
+        gameManager.setPlayerLives(gameManager.getPlayerLives()-1);
+        gameManager.updateHeartsDisplay();
 
-        if (lives <= 0)
+        if (gameManager.getPlayerLives() <= 0)
         {
+            source.PlayOneShot(gameOverSound, soundsLevel);
             Debug.Log("Game Over");
         }
         else
@@ -186,17 +206,22 @@ public class PlayerController : MonoBehaviour {
             // Jeœli po³o¿enie gracza jest powy¿ej przeciwnika, uwzglêdniaj¹c wysokoœæ obu obiektów - dlatego dodajemy wysokosc gracza
             if (this.transform.position.y > other.transform.position.y + this.transform.localScale.y / 2)
             {
-                score += 1; // Zwiêksz liczbê zdobytych punktów
+                source.PlayOneShot(enemyKilledSound, soundsLevel);
                 Debug.Log("player: " + transform.position.y + " enemy: " + other.transform.position.y);
-                //Debug.Log("Killed an enemy");
+                gameManager.increaseKilledEnemies();
             }
             else
             {
-                lives--; // Zmniejsz liczbê ¿yæ
-                Debug.Log("Player hit! Lives left: " + lives);
+                // Odtwórz dŸwiêk
+                source.PlayOneShot(deathSound, soundsLevel);
 
-                if (lives <= 0)
+                // Przeciwnik zabi³ gracza
+                gameManager.setPlayerLives(gameManager.getPlayerLives()-1);
+                gameManager.updateHeartsDisplay();
+
+                if (gameManager.getPlayerLives() <= 0)
                 {
+                    source.PlayOneShot(gameOverSound, soundsLevel);
                     Debug.Log("Game Over");
                 }
                 else
@@ -208,8 +233,10 @@ public class PlayerController : MonoBehaviour {
         }
         else if (other.CompareTag("Key"))
         {
-            keysFound++; // Zwiêksz liczbê znalezionych kluczy
-            Debug.Log("Znaleziono klucz! Liczba kluczy: " + keysFound); // Wypisz komunikat
+            // Odtwórz dŸwiêk
+            source.PlayOneShot(bSound, soundsLevel);
+
+            gameManager.AddKeys();
             other.gameObject.SetActive(false); // Dezaktywuj obiekt klucza
         }
         else if (other.CompareTag("Heart"))
@@ -220,22 +247,31 @@ public class PlayerController : MonoBehaviour {
             if (additionalHeartsFounded == additionalHearts)
             {
                 Debug.Log("Znaleziono wszystkie dodatkowe serca! Otrzymujesz dodatkowe zycie!");
-                lives++;
+                //
+                int numberOfLives = gameManager.getPlayerLives();
+                numberOfLives++;
+                Debug.Log(numberOfLives);
+                gameManager.setPlayerLives(numberOfLives);
+                gameManager.updateHeartsDisplay();
             }
             else
             {
-                Debug.Log("Znaleziono dodatkowe serce! Zbierz jeszcze " + (additionalHearts - additionalHeartsFounded) + " i zdobadz jedno dodatkowe zycie!" + keysFound);   
+                Debug.Log("Znaleziono dodatkowe serce! Zbierz jeszcze " + (additionalHearts - additionalHeartsFounded) + " i zdobadz jedno dodatkowe zycie!");   
             }
         }
         else if (other.CompareTag("endPoint"))
         {
-            if(keysFound == keysNumber)
+            if(gameManager.getKeysFounded() == gameManager.getKeysNumber())
             {
-                Debug.Log("Game Over!");
+                source.PlayOneShot(gameOverSound, soundsLevel);
+
+
+                gameManager.setPlayerScore(gameManager.getPlayerScore() + (100 * gameManager.getPlayerLives()));
+                gameManager.LevelCompleted();
             }
             else
             {
-                Debug.Log("Nie zebrales wszystkich kluczy! Pozostalo do zebrania: " + (keysNumber - keysFound));
+                Debug.Log("Nie zebrales wszystkich kluczy! Pozostalo do zebrania: " + (gameManager.getKeysNumber() - gameManager.getKeysFounded()));
             }
         }
         else if (other.CompareTag("fallLevel"))
@@ -244,8 +280,8 @@ public class PlayerController : MonoBehaviour {
         }
         else if (other.CompareTag("Cherry"))
         {
-            points += 100;
-            Debug.Log("Dodatkowe 100 punktow! Liczba punktow: " + points);
+            source.PlayOneShot(bonusSound, soundsLevel);
+            gameManager.AddPoints(100);
             other.gameObject.SetActive(false); // Dezaktywuj obiekt 
         }
         else if (other.CompareTag("Ladder"))
