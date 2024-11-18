@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Enemy
+  - Key
+  - Heart
+  - endPoint
+  - fallLevel
+  - Cherry
+  - Ladder
+  - Fire
+  - movingPlatform
+  - generatedPlatform
+  - ScoreLabel
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - Ground
+  - Ladder
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 1124468919
+    locked: 0
+  - name: Tilemap
+    uniqueID: 3418965303
+    locked: 0
+  - name: Props
+    uniqueID: 1284324621
+    locked: 0
+  - name: Platforms
+    uniqueID: 2889754837
+    locked: 0
+  - name: Player and Enemies
+    uniqueID: 773654113
+    locked: 0
+  - name: Foreground
+    uniqueID: 3549885467
+    locked: 0
+  - name: Ladder
+    uniqueID: 443468541
+    locked: 0
