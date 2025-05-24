@@ -1,91 +1,114 @@
 # Little Fox Adventure
 
-> Odkryj uroki platformówki w stylu retro, prowadząc sprytnego lisa przez niebezpieczne poziomy pełne zagadek i skarbów!
+[English](#english-version) | [Polski](#wersja-polska)
 
 ---
 
-## Spis treści
+## English Version
 
-* [Opis projektu](#opis-projektu)
-* [Technologie i narzędzia](#technologie-i-narz%C4%99dzia)
-* [Funkcjonalności](#funkcjonalno%C5%9Bci)
-* [Instalacja i uruchomienie](#instalacja-i-uruchomienie)
-* [Jak grać](#jak-gra%C4%87)
-* [Struktura repozytorium](#struktura-repozytorium)
-* [Wyzwania i rozwiązania](#wyzwania-i-rozwiazania)
-* [Status projektu](#status-projektu)
-* [Autor / Kontakt](#autor--kontakt)
-* [Licencja](#licencja)
+### Project Description
 
----
+Little Fox Adventure is a 2D retro-style platformer built in Unity 2022.3.10f1 using the 2D Universal Render Pipeline. Guide a clever fox through two challenging levels riddled with puzzles and treasures.
 
-## Opis projektu
+### Technologies & Tools
 
-Little Fox Adventure to dwuwymiarowa gra platformowa stworzona w Unity 2022.3.10f1 z wykorzystaniem 2D Universal Render Pipeline. Gracz steruje liskiem, porusza się, skacze i zbiera klucze, by otworzyć przejścia i ukończyć dwa zróżnicowane poziomy.
+* **Engine:** Unity 2022.3.10f1 (2D URP)
+* **Language:** C#
+* **Rendering:** Sprite Renderer, Tilemap (Tile Palette, Composite Collider 2D)
+* **Physics:** Rigidbody2D, Collider2D (Box, Circle), collision and trigger detection
+* **UI:** Canvas & TextMeshPro for HUD (points, lives, keys)
+* **Version Control:** Git & GitHub
 
----
+### Features
 
-## Technologie i narzędzia
+* **Movement & Jumping:** WASD/arrow keys + Space
+* **Collectibles:** Keys and bonuses via trigger interactions
+* **Life System:** 3 lives, level reset upon losing all
+* **Scene Management:** Two distinct levels (`Level1`, `Level2`) handled by GameManager
+* **HUD:** Real-time display of score, keys, and lives
 
-* **Silnik**: Unity 2022.3.10f1 (2D URP)
-* **Język**: C#
-* **Renderowanie**: Sprite Renderer, Tilemap (Tile Palette, Composite Collider 2D)
-* **Fizyka**: Rigidbody2D, Collider2D (Box, Circle), detekcja kolizji i triggerów
-* **Interfejs**: Canvas + TextMeshPro dla HUD (punkty, życia, klucze)
-* **Kontrola wersji**: Git & GitHub
-
----
-
-## Funkcjonalności
-
-* **Poruszanie i skoki**: sterowanie klawiszami WSAD / strzałkami i Spacją
-* **Zbieranie przedmiotów**: klucze oraz inne bonusy wyzwalane podczas wejścia w trigger
-* **System życia**: początkowo 3 życia; reset poziomu po utracie wszystkich
-* **Zarządzanie scenami**: dwa poziomy (`Level1`, `Level2`) załadowywane przez GameManager
-* **HUD**: dynamiczne wyświetlanie stanu punktów, kluczy i żyć
-
----
-
-## Struktura repozytorium
+### Repository Structure
 
 ```
 Little-Fox_Adventure/
 ├── Assets/
-│   ├── Scenes/         # Sceny Unity (Level1, Level2)
-│   ├── Scripts/        # Skrypty C# (ruch, logika, GameManager)
-│   ├── Sprites/        # Grafiki 2D (postacie, tła, ikony)
-│   ├── Prefabs/        # Prefaby: gracz, przeszkody, bonusy
-│   └── UI/             # Elementy interfejsu (Canvas, HUD)
-├── ProjectSettings/    # Konfiguracja projektu Unity
+│   ├── Scenes/       # Unity scenes (Level1, Level2)
+│   ├── Scripts/      # C# scripts (movement, logic, GameManager)
+│   ├── Sprites/      # 2D art assets (characters, backgrounds, icons)
+│   ├── Prefabs/      # Prefabs: player, obstacles, pickups
+│   └── UI/           # UI elements (Canvas, HUD)
+├── ProjectSettings/  # Unity project settings
 ├── .gitignore
-└── README.md
+└── README.md         # This file
 ```
 
----
+### Challenges & Solutions
 
-## Wyzwania i rozwiązania
+* **Collision Detection:** Used Composite Collider 2D and Layers for optimized platform collisions.
+* **Game State Management:** Simple GameManager for scene loading and restart logic—no external patterns.
+* **Dynamic HUD:** TextMeshPro text updates on state change events.
 
-* **Detekcja kolizji z platformami**: skorzystałem z `Composite Collider 2D` i warstw (`Layers`) dla optymalizacji.
-* **Zarządzanie stanem gry**: prosty `GameManager` bez zewnętrznych wzorców, odpowiadający za ładowanie scen i reset rozgrywki.
-* **Dynamiczny HUD**: użycie TextMeshPro i aktualizacja tekstów w skryptach przy każdej zmianie stanu.
+### Project Status
 
----
-
-## Status projektu
-
-Projekt jest ukończony i nie jest dalej rozwijany.
+Complete and no longer in active development.
 
 ---
 
-## Autor / Kontakt
+## Wersja polska
 
-* **Igor Tomkowicz**
-* GitHub: [npnpdev](https://github.com/npnpdev)
-* LinkedIn: [Igor Tomkowicz](https://www.linkedin.com/in/igor-tomkowicz-a5760b358/)
-* E-mail: npnpdev@gmail.com
+### Opis projektu
 
----
+Little Fox Adventure to dwuwymiarowa gra platformowa w stylu retro, stworzona w Unity 2022.3.10f1 z wykorzystaniem 2D Universal Render Pipeline. Steruj sprytnym liskiem przez dwa poziomy pełne zagadek i skarbów.
 
-## Licencja
+### Technologie i narzędzia
 
-Ten projekt jest dostępny na licencji MIT. Zobacz plik [LICENSE](LICENSE) po szczegóły.
+* **Silnik:** Unity 2022.3.10f1 (2D URP)
+* **Język:** C#
+* **Renderowanie:** Sprite Renderer, Tilemap (Tile Palette, Composite Collider 2D)
+* **Fizyka:** Rigidbody2D, Collider2D (Box, Circle), detekcja kolizji i triggerów
+* **Interfejs:** Canvas i TextMeshPro dla HUD (punkty, życie, klucze)
+* **Kontrola wersji:** Git & GitHub
+
+### Funkcjonalności
+
+* **Ruch i skoki:** WSAD/strzałki + Spacja
+* **Zbieranie przedmiotów:** Klucze i bonusy poprzez wejście w trigger
+* **System życia:** 3 życia, reset poziomu po utracie wszystkich
+* **Zarządzanie scenami:** Dwa poziomy (`Level1`, `Level2`) zarządzane przez GameManager
+* **HUD:** Dynamiczne wyświetlanie punktów, kluczy i życia
+
+### Struktura repozytorium
+
+```
+Little-Fox_Adventure/
+├── Assets/
+│   ├── Scenes/       # Sceny Unity (Level1, Level2)
+│   ├── Scripts/      # Skrypty C# (ruch, logika, GameManager)
+│   ├── Sprites/      # Grafiki 2D (postacie, tła, ikony)
+│   ├── Prefabs/      # Prefaby: gracz, przeszkody, bonusy
+│   └── UI/           # Elementy interfejsu (Canvas, HUD)
+├── ProjectSettings/  # Ustawienia projektu Unity
+├── .gitignore
+└── README.md         # Ten plik
+```
+
+### Wyzwania i rozwiązania
+
+* **Detekcja kolizji:** Zastosowanie Composite Collider 2D oraz warstw dla optymalizacji.
+* **Zarządzanie stanem gry:** Prosty GameManager odpowiadający za ładowanie scen i reset rozgrywki.
+* **Dynamiczny HUD:** Aktualizacja TextMeshPro przy zmianach stanu gry.
+
+### Status projektu
+
+Projekt ukończony, brak dalszego rozwoju.
+
+### Author / Autor
+
+* **Author:** Igor Tomkowicz
+* **GitHub:** [npnpdev](https://github.com/npnpdev)
+* **LinkedIn:** [Igor Tomkowicz](https://www.linkedin.com/in/igor-tomkowicz-a5760b358/)
+* **Email:** [npnpdev@gmail.com](mailto:npnpdev@gmail.com)
+
+### License / Licencja
+
+MIT
